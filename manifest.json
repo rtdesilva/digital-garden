@@ -2,7 +2,7 @@
   "name": "Digital Garden",
   "short_name": "Garden",
   "description": "Nurture your daily growth and habits.",
-  "start_url": "./digital_garden.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#fcf9f4",
   "theme_color": "#944a18",

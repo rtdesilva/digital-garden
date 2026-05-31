@@ -1,6 +1,6 @@
 const CACHE_NAME = 'bloom-garden-cache-v1';
 const ASSETS = [
-  './digital_garden.html',
+  './index.html',
   './manifest.json',
   './img/hero.png',
   './img/sunrise.png'
