@@ -1038,6 +1038,12 @@ async function loadUserData() {
     loadLocalData();
     return;
   }
+
+  // Clear any stale local test data so it never bleeds into a real account
+  localStorage.removeItem('bloom_habits');
+  localStorage.removeItem('bloom_history');
+  localStorage.removeItem('bloom_profile_name');
+  localStorage.removeItem('bloom_profile_avatar');
   
   try {
     // Habits
@@ -1067,8 +1073,9 @@ async function loadUserData() {
     }
   } catch (error) {
     console.error("Error loading user data from Supabase:", error);
-    showAuthError("Cloud fetch failed. Loading local data.");
-    loadLocalData();
+    // If tables don't exist yet, just start fresh — don't load stale local data
+    state.habits = [];
+    state.history = {};
   }
   
   renderHabits();
@@ -1080,11 +1087,8 @@ async function loadUserData() {
 function loadLocalData() {
   const habits = localStorage.getItem('bloom_habits');
   const history = localStorage.getItem('bloom_history');
-  state.habits = habits ? JSON.parse(habits) : [
-    { id: '1', name: 'Morning Yoga', icon: 'self_improvement', iconColor: 'text-primary', freq: 'Daily' },
-    { id: '2', name: 'Read 10 pages', icon: 'menu_book', iconColor: 'text-tertiary', freq: 'Daily' },
-    { id: '3', name: 'Hydrate', icon: 'water_drop', iconColor: 'text-[#3b82f6]', freq: 'Daily' }
-  ];
+  // Start fresh — no hardcoded demo habits
+  state.habits = habits ? JSON.parse(habits) : [];
   state.history = history ? JSON.parse(history) : {};
   
   renderHabits();
