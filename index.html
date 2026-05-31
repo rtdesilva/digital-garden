@@ -1149,7 +1149,7 @@ async function saveProfile() {
 function nextOnboardingStep() {
   onboardingStep++;
   if (onboardingStep >= ONBOARDING_DATA.length) {
-    localStorage.setItem('bloom_onboarded', 'true');
+    completeOnboarding();
     showScreen('today');
     return;
   }
@@ -1394,12 +1394,18 @@ async function init() {
 }
 
 function checkOnboarding() {
-  const onboarded = localStorage.getItem('bloom_onboarded');
+  const userId = state.user?.id || 'local';
+  const onboarded = localStorage.getItem(`bloom_onboarded_${userId}`);
   if (!onboarded) {
     showScreen('onboarding');
   } else {
     showScreen('today');
   }
+}
+
+function completeOnboarding() {
+  const userId = state.user?.id || 'local';
+  localStorage.setItem(`bloom_onboarded_${userId}`, 'true');
 }
 
 if ('serviceWorker' in navigator) {
