@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Digital Garden</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "error": "#c96f53",
+        "surface-bright": "#fcf9f4",
+        "surface-dim": "#dcdad5",
+        "on-tertiary-fixed": "#231a0d",
+        "secondary-fixed": "#c8ebca",
+        "on-error": "#ffffff",
+        "inverse-surface": "#31302d",
+        "outline-variant": "#dac2b6",
+        "on-tertiary": "#ffffff",
+        "surface-container-highest": "#e5e2dd",
+        "inverse-primary": "#ffb68d",
+        "surface-tint": "#944a18",
+        "primary": "#944a18",
+        "on-secondary-container": "#4b6a4f",
+        "tertiary-fixed-dim": "#d5c4af",
+        "outline": "#877369",
+        "on-tertiary-fixed-variant": "#514535",
+        "surface-container": "#f0ede9",
+        "on-secondary-fixed": "#03210c",
+        "error-container": "#ffdad6",
+        "surface-container-high": "#ebe8e3",
+        "on-surface-variant": "#54433a",
+        "surface-container-low": "#f6f3ee",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#c6e9c7",
+        "surface": "#fcf9f4",
+        "surface-container-lowest": "#ffffff",
+        "on-primary-fixed": "#331200",
+        "primary-container": "#ff9f66",
+        "on-secondary-fixed-variant": "#304d35",
+        "tertiary-fixed": "#f2e0ca",
+        "on-error-container": "#93000a",
+        "background": "#fcf9f4",
+        "on-primary-fixed-variant": "#763300",
+        "on-surface": "#1c1c19",
+        "tertiary": "#695c4b",
+        "primary-fixed": "#ffdbc9",
+        "on-primary-container": "#773401",
+        "inverse-on-surface": "#f3f0eb",
+        "on-primary": "#ffffff",
+        "tertiary-container": "#c5b4a0",
+        "secondary": "#47664b",
+        "secondary-fixed-dim": "#adcfaf",
+        "surface-variant": "#e5e2dd",
+        "on-tertiary-container": "#524636",
+        "on-background": "#1c1c19",
+        "primary-fixed-dim": "#ffb68d"
+      },
+      borderRadius: {
+        "DEFAULT": "1rem",
+        "lg": "2rem",
+        "xl": "3rem",
+        "full": "9999px"
+      },
+      spacing: {
+        "stack-gap": "16px",
+        "unit": "8px",
+        "touch-target": "48px",
+        "container-padding": "24px",
+        "section-gap": "40px"
+      },
+      fontFamily: {
+        "label-md": ["Quicksand"],
+        "headline-lg-mobile": ["Lexend"],
+        "body-md": ["Quicksand"],
+        "display": ["Lexend"],
+        "headline-md": ["Lexend"],
+        "headline-lg": ["Lexend"],
+        "label-sm": ["Quicksand"],
+        "body-lg": ["Quicksand"]
+      },
+      fontSize: {
+        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "700"}],
+        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+        "display": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "500"}]
+      }
+    }
+  }
+}
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+  .active-icon { font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+  .vector-icon { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48; }
+  .bloom-animation { animation: bloom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+  @keyframes bloom { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .soft-shadow { box-shadow: 0 4px 20px rgba(148, 74, 24, 0.08); }
+  .glass-card { background: rgba(252, 249, 244, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(148, 74, 24, 0.08); }
+  .squishy-btn:active { transform: scale(0.98); }
+  .organic-blob { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40% !important; }
+  @keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  .primary-btn-bounce:hover {
+    animation: bounce-subtle 0.6s ease infinite;
+  }
+  ::-webkit-scrollbar { display: none; }
+  body { min-height: 100dvh; background-color: #fcf9f4; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(3deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+  .animate-float { animation: float 5s ease-in-out infinite; }
+  .particle { position: absolute; pointer-events: none; border-radius: 50%; z-index: 10; }
+  .bloom-shadow { box-shadow: 0 0 60px 20px rgba(255, 159, 102, 0.15); }
+  @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .slide-up { animation: slideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  /* Insights chart bar */
+  .bar-fill { transition: height 0.6s cubic-bezier(0.22,1,0.36,1); }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="manifest" href="manifest.json">
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased">
+
+<!-- ===================== SCREEN: AUTH ===================== -->
+<div class="screen active" id="screen-auth">
+  <main class="min-h-screen w-full flex flex-col items-center justify-center px-container-padding py-12" style="background: radial-gradient(circle at center, #ffffff 0%, #fcf9f4 100%);">
+    <div class="w-full max-w-[400px] text-center space-y-6">
+      <!-- Logo -->
+      <div class="flex flex-col items-center gap-2">
+        <div class="w-16 h-16 bg-primary-container/20 rounded-full flex items-center justify-center bloom-shadow">
+          <span class="material-symbols-outlined text-primary text-[40px]">filter_vintage</span>
+        </div>
+        <h1 class="font-display text-headline-lg text-primary mt-2">Digital Garden</h1>
+        <p class="font-body-md text-on-surface-variant" id="auth-subtitle">Nurture your daily growth.</p>
+      </div>
+
+      <!-- Glass container -->
+      <div class="glass-card p-8 rounded-lg soft-shadow space-y-6">
+        <h2 class="font-headline-md text-headline-md text-on-surface text-left" id="auth-title">Welcome back</h2>
+        
+        <div class="space-y-4 text-left">
+          <!-- Email -->
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface" for="auth-email">Email</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-tertiary-container">mail</span>
+              <input id="auth-email" type="email" placeholder="you@example.com"
+                class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-2 border-tertiary-fixed rounded-full font-body-md text-body-md text-on-surface placeholder:text-tertiary-container focus:outline-none focus:border-primary transition-colors"/>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface" for="auth-password">Password</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-tertiary-container">lock</span>
+              <input id="auth-password" type="password" placeholder="••••••••"
+                class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-2 border-tertiary-fixed rounded-full font-body-md text-body-md text-on-surface placeholder:text-tertiary-container focus:outline-none focus:border-primary transition-colors"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Message (Terracotta) -->
+        <div id="auth-error" class="hidden text-error font-body-sm text-body-sm bg-error/10 p-3.5 rounded-lg text-left border border-error/20">
+        </div>
+
+        <!-- Actions -->
+        <div class="space-y-4">
+          <button onclick="handleAuthSubmit()" id="auth-submit-btn" class="w-full py-4 bg-primary text-white rounded-full font-display text-headline-md shadow-[0_8px_30px_rgba(148,74,24,0.20)] hover:bg-primary/90 hover:translate-y-[-2px] active:translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2 squishy-btn primary-btn-bounce">
+            <span>Sign In</span>
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+
+          <p class="font-body-md text-on-surface-variant text-center">
+            <span id="auth-toggle-text">Don't have an account?</span>
+            <button onclick="toggleAuthMode()" class="text-primary font-bold hover:underline focus:outline-none ml-1" id="auth-toggle-btn">Sign Up</button>
+          </p>
+        </div>
+      </div>
+
+      <!-- Local Fallback Notice -->
+      <div id="local-mode-banner" class="hidden glass-card px-4 py-3 text-center flex items-center justify-center gap-2 bg-primary/5 border border-primary/10">
+        <span class="material-symbols-outlined text-[18px] text-primary">cloud_off</span>
+        <span class="font-label-sm text-label-sm text-primary">Local Sandbox Mode — Connect to Supabase to sync data</span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== SCREEN: ONBOARDING ===================== -->
+<div class="screen" id="screen-onboarding">
+  <main class="min-h-screen w-full flex flex-col items-center justify-between px-container-padding py-12" style="background: radial-gradient(circle at center, #ffffff 0%, #fcf9f4 100%);">
+    <div class="w-full max-w-[500px] flex-grow flex flex-col justify-center items-center text-center space-y-8">
+      
+      <!-- Animated Seedling Carousel -->
+      <div class="relative w-48 h-48 flex items-center justify-center animate-float">
+        <div class="absolute w-36 h-36 bg-primary-container opacity-20 blur-[60px] rounded-full"></div>
+        <div class="w-32 h-32 rounded-full bg-primary-fixed flex items-center justify-center border-4 border-primary-container bloom-shadow">
+          <span class="material-symbols-outlined text-primary text-[64px]" id="onboarding-icon">filter_vintage</span>
+        </div>
+      </div>
+
+      <!-- Carousel Text Content -->
+      <div class="space-y-4 max-w-[400px]">
+        <h1 class="font-display text-headline-lg text-primary animate-pulse" id="onboarding-title">Welcome to your Digital Garden</h1>
+        <p class="font-body-lg text-on-surface-variant" id="onboarding-text">Plant habits like seeds, nourish them daily, and watch your personal garden bloom over time.</p>
+      </div>
+
+      <!-- Carousel Dot Indicators -->
+      <div class="flex gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-primary" id="dot-0"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest" id="dot-1"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest" id="dot-2"></span>
+      </div>
+    </div>
+
+    <!-- Footer navigation -->
+    <div class="w-full max-w-[400px] space-y-4">
+      <button onclick="nextOnboardingStep()" id="onboarding-next-btn" class="w-full py-4 bg-primary text-white rounded-full font-display text-headline-md shadow-[0_8px_30px_rgba(148,74,24,0.15)] hover:bg-primary/90 hover:translate-y-[-2px] active:translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2 squishy-btn">
+        <span>Continue</span>
+        <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+      </button>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== SCREEN: PROFILE ===================== -->
+<div class="screen" id="screen-profile">
+  <header class="w-full top-0 sticky bg-surface z-30">
+    <div class="flex items-center justify-between px-container-padding py-4 w-full max-w-[800px] mx-auto">
+      <button onclick="showScreen('today')" class="flex items-center justify-center p-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-90">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+      <h1 class="font-headline-md text-headline-md text-on-surface">Your Profile</h1>
+      <div class="w-10"></div>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-container-padding pb-32 slide-up space-y-8">
+    <!-- Profile Header / Avatar selection -->
+    <section class="flex flex-col items-center text-center p-6 glass-card rounded-lg soft-shadow space-y-4">
+      <div class="relative group">
+        <div class="w-24 h-24 rounded-full bg-primary-fixed flex items-center justify-center border-4 border-primary-container overflow-hidden bloom-shadow">
+          <span class="material-symbols-outlined text-primary text-[56px]" id="profile-avatar-display">person</span>
+        </div>
+      </div>
+      <div>
+        <h2 class="font-headline-md text-headline-md text-on-surface" id="profile-name-display">Alex</h2>
+        <p class="font-body-md text-on-surface-variant" id="profile-email-display">alex@example.com</p>
+      </div>
+    </section>
+
+    <!-- Account Settings -->
+    <section class="glass-card rounded-lg p-6 soft-shadow space-y-6">
+      <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ACCOUNT SETTINGS</h3>
+      
+      <div class="space-y-4">
+        <!-- Update Name -->
+        <div class="space-y-2">
+          <label class="font-label-md text-label-md text-on-surface">Display Name</label>
+          <input id="profile-name-input" type="text" placeholder="Your name"
+            class="w-full px-6 py-3 bg-surface-container-low border-2 border-tertiary-fixed rounded-full font-body-md text-body-md text-on-surface placeholder:text-tertiary-container focus:outline-none focus:border-primary transition-colors"/>
+        </div>
+
+        <!-- Update Avatar Icon -->
+        <div class="space-y-2">
+          <label class="font-label-md text-label-md text-on-surface">Choose Avatar Icon</label>
+          <div class="flex gap-3 overflow-x-auto py-1">
+            <button onclick="selectProfileAvatar('person')" class="avatar-chip w-12 h-12 rounded-full border-2 border-primary bg-primary-container/20 flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-primary">person</span></button>
+            <button onclick="selectProfileAvatar('eco')" class="avatar-chip w-12 h-12 rounded-full border-2 border-transparent bg-surface-container flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-on-surface-variant">eco</span></button>
+            <button onclick="selectProfileAvatar('spa')" class="avatar-chip w-12 h-12 rounded-full border-2 border-transparent bg-surface-container flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-on-surface-variant">spa</span></button>
+            <button onclick="selectProfileAvatar('filter_vintage')" class="avatar-chip w-12 h-12 rounded-full border-2 border-transparent bg-surface-container flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-on-surface-variant">filter_vintage</span></button>
+            <button onclick="selectProfileAvatar('psychology')" class="avatar-chip w-12 h-12 rounded-full border-2 border-transparent bg-surface-container flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-on-surface-variant">psychology</span></button>
+          </div>
+        </div>
+
+        <button onclick="saveProfile()" class="w-full py-4 bg-primary text-white rounded-full font-display text-headline-md shadow-[0_8px_30px_rgba(148,74,24,0.15)] hover:bg-primary/90 hover:translate-y-[-2px] active:translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2 squishy-btn">
+          Save Profile Changes
+        </button>
+      </div>
+    </section>
+
+    <!-- App Integration Info -->
+    <section class="glass-card rounded-lg p-6 soft-shadow flex flex-col items-center justify-center text-center space-y-4">
+      <div class="flex items-center gap-2 text-primary">
+        <span class="material-symbols-outlined">database</span>
+        <span class="font-label-md text-label-md font-bold">Supabase Cloud Sync</span>
+      </div>
+      <p class="font-body-md text-on-surface-variant max-w-[400px]">
+        Your habits and progress are securely backed up in real-time, syncing automatically between all your devices.
+      </p>
+      <button onclick="logout()" class="w-full py-4 border-2 border-error text-error hover:bg-error/5 rounded-full font-display text-headline-md transition-all duration-300 flex items-center justify-center gap-2 squishy-btn">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+        Sign Out of Account
+      </button>
+    </section>
+  </main>
+</div>
+
+<!-- ===================== SCREEN: AUTH ===================== -->
+<div class="screen" id="screen-auth">
+  <main class="min-h-screen w-full flex flex-col items-center justify-center px-container-padding py-12" style="background: radial-gradient(circle at center, #ffffff 0%, #fcf9f4 100%);">
+    <div class="w-full max-w-[400px] text-center space-y-6">
+      <!-- Logo -->
+      <div class="flex flex-col items-center gap-2">
+        <div class="w-16 h-16 bg-primary-container/20 rounded-full flex items-center justify-center bloom-shadow">
+          <span class="material-symbols-outlined text-primary text-[40px]">filter_vintage</span>
+        </div>
+        <h1 class="font-display text-headline-lg text-primary mt-2">Digital Garden</h1>
+        <p class="font-body-md text-on-surface-variant" id="auth-subtitle">Nurture your daily growth.</p>
+      </div>
+
+      <!-- Glass container -->
+      <div class="glass-card p-8 rounded-lg soft-shadow space-y-6">
+        <h2 class="font-headline-md text-headline-md text-on-surface text-left" id="auth-title">Welcome back</h2>
+        
+        <div class="space-y-4 text-left">
+          <!-- Email -->
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface" for="auth-email">Email</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-tertiary-container">mail</span>
+              <input id="auth-email" type="email" placeholder="you@example.com"
+                class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-2 border-tertiary-fixed rounded-full font-body-md text-body-md text-on-surface placeholder:text-tertiary-container focus:outline-none focus:border-primary transition-colors"/>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-2">
+            <label class="font-label-md text-label-md text-on-surface" for="auth-password">Password</label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-tertiary-container">lock</span>
+              <input id="auth-password" type="password" placeholder="••••••••"
+                class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-2 border-tertiary-fixed rounded-full font-body-md text-body-md text-on-surface placeholder:text-tertiary-container focus:outline-none focus:border-primary transition-colors"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Message (Terracotta) -->
+        <div id="auth-error" class="hidden text-error font-body-sm text-body-sm bg-error/10 p-3.5 rounded-lg text-left border border-error/20">
+        </div>
+
+        <!-- Actions -->
+        <div class="space-y-4">
+          <button onclick="handleAuthSubmit()" id="auth-submit-btn" class="w-full py-4 bg-primary text-white rounded-full font-display text-headline-md shadow-[0_8px_30px_rgba(148,74,24,0.20)] hover:bg-primary/90 hover:translate-y-[-2px] active:translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2 squishy-btn primary-btn-bounce">
+            <span>Sign In</span>
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+
+          <p class="font-body-md text-on-surface-variant text-center">
+            <span id="auth-toggle-text">Don't have an account?</span>
+            <button onclick="toggleAuthMode()" class="text-primary font-bold hover:underline focus:outline-none ml-1" id="auth-toggle-btn">Sign Up</button>
+          </p>
+        </div>
+      </div>
+
+      <!-- Local Fallback Notice -->
+      <div id="local-mode-banner" class="hidden glass-card px-4 py-3 text-center flex items-center justify-center gap-2 bg-primary/5 border border-primary/10">
+        <span class="material-symbols-outlined text-[18px] text-primary">cloud_off</span>
+        <span class="font-label-sm text-label-sm text-primary">Local Sandbox Mode — Connect to Supabase to sync data</span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== SCREEN: ONBOARDING ===================== -->
+<div class="screen" id="screen-onboarding">
+  <main class="min-h-screen w-full flex flex-col items-center justify-between px-container-padding py-12" style="background: radial-gradient(circle at center, #ffffff 0%, #fcf9f4 100%);">
+    <div class="w-full max-w-[500px] flex-grow flex flex-col justify-center items-center text-center space-y-8">
+      
+      <!-- Animated Seedling Carousel -->
+      <div class="relative w-48 h-48 flex items-center justify-center animate-float">
+        <div class="absolute w-36 h-36 bg-primary-container opacity-20 blur-[60px] rounded-full"></div>
+        <div class="w-32 h-32 rounded-full bg-primary-fixed flex items-center justify-center border-4 border-primary-container bloom-shadow">
+          <span class="material-symbols-outlined text-primary text-[64px]" id="onboarding-icon">filter_vintage</span>
+        </div>
+      </div>
+
+      <!-- Carousel Text Content -->
+      <div class="space-y-4 max-w-[400px]">
+        <h1 class="font-display text-headline-lg text-primary animate-pulse" id="onboarding-title">Welcome to your Digital Garden</h1>
+        <p class="font-body-lg text-on-surface-variant" id="onboarding-text">Plant habits like seeds, nourish them daily, and watch your personal garden bloom over time.</p>
+      </div>
+
+      <!-- Carousel Dot Indicators -->
+      <div class="flex gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-primary" id="dot-0"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest" id="dot-1"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-surface-container-highest" id="dot-2"></span>
+      </div>
+    </div>
+
+    <!-- Footer navigation -->
+    <div class="w-full max-w-[400px] space-y-4">
+      <button onclick="nextOnboardingStep()" id="onboarding-next-btn" class="w-full py-4 bg-primary text-white rounded-full font-display text-headline-md shadow-[0_8px_30px_rgba(148,74,24,0.15)] hover:bg-primary/90 hover:translate-y-[-2px] active:translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2 squishy-btn">
+        <span>Continue</span>
+        <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+      </button>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== SCREEN: PROFILE ===================== -->
+<div class="screen" id="screen-profile">
+  <header class="w-full top-0 sticky bg-surface z-30">
+    <div class="flex items-center justify-between px-container-padding py-4 w-full max-w-[800px] mx-auto">
+      <button onclick="showScreen('today')" class="flex items-center justify-center p-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-90">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+      <h1 class="font-headline-md text-headline-md text-on-surface">Your Profile</h1>
+      <div class="w-10"></div>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-container-padding pb-32 slide-up space-y-8">
+    <!-- Profile Header / Avatar selection -->
+    <section class="flex flex-col items-center text-center p-6 glass-card rounded-lg soft-shadow space-y-4">
+      <div class="relative group">
+        <div class="w-24 h-24 rounded-full bg-primary-fixed flex items-center justify-center border-4 border-primary-container overflow-hidden bloom-shadow">
+          <span class="material-symbols-outlined text-primary text-[56px]" id="profile-avatar-display">person</span>
+        </div>
+      </div>
+      <div>
+        <h2 class="font-headline-md text-headline-md text-on-surface" id="profile-name-display">Alex</h2>
+        <p class="font-body-md text-on-surface-variant" id="profile-email-display">alex@example.com</p>
+      </div>
+    </section>
+
+    <!-- Account Settings -->
+    <section class="glass-card rounded-lg p-6 soft-shadow space-y-6">
+      <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">ACCOUNT SETTINGS</h3>
+      
+      <div class="space-y-4">
+        <!-- Update Name -->
+        <div class="space-y-2">
+          <label class="font-label-md text-label-md text-on-surface">Display Name</label>
+          <input id="profile-name-input" type="text" placeholder="Your name"
+            class="w-full px-6 py-3 bg-surface-container-low border-2 border-tertiary-fixed rounded-full font-body-md text-body-md text-on-surface placeholder:text-tertiary-container focus:outline-none focus:border-primary transition-colors"/>
+        </div>
+
+        <!-- Update Avatar Icon -->
+        <div class="space-y-2">
+          <label class="font-label-md text-label-md text-on-surface">Choose Avatar Icon</label>
+          <div class="flex gap-3 overflow-x-auto py-1">
+            <button onclick="selectProfileAvatar('person')" class="avatar-chip w-12 h-12 rounded-full border-2 border-primary bg-primary-container/20 flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-primary">person</span></button>
+            <button onclick="selectProfileAvatar('eco')" class="avatar-chip w-12 h-12 rounded-full border-2 border-transparent bg-surface-container flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-on-surface-variant">eco</span></button>
+            <button onclick="selectProfileAvatar('spa')" class="avatar-chip w-12 h-12 rounded-full border-2 border-transparent bg-surface-container flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-on-surface-variant">spa</span></button>
+            <button onclick="selectProfileAvatar('filter_vintage')" class="avatar-chip w-12 h-12 rounded-full border-2 border-transparent bg-surface-container flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-on-surface-variant">filter_vintage</span></button>
+            <button onclick="selectProfileAvatar('psychology')" class="avatar-chip w-12 h-12 rounded-full border-2 border-transparent bg-surface-container flex items-center justify-center transition-all squishy-btn"><span class="material-symbols-outlined text-on-surface-variant">psychology</span></button>
+          </div>
+        </div>
+
+        <button onclick="saveProfile()" class="w-full py-4 bg-primary text-white rounded-full font-display text-headline-md shadow-[0_8px_30px_rgba(148,74,24,0.15)] hover:bg-primary/90 hover:translate-y-[-2px] active:translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2 squishy-btn">
+          Save Profile Changes
+        </button>
+      </div>
+    </section>
+
+    <!-- App Integration Info -->
+    <section class="glass-card rounded-lg p-6 soft-shadow flex flex-col items-center justify-center text-center space-y-4">
+      <div class="flex items-center gap-2 text-primary">
+        <span class="material-symbols-outlined">database</span>
+        <span class="font-label-md text-label-md font-bold">Supabase Cloud Sync</span>
+      </div>
+      <p class="font-body-md text-on-surface-variant max-w-[400px]">
+        Your habits and progress are securely backed up in real-time, syncing automatically between all your devices.
+      </p>
+      <button onclick="logout()" class="w-full py-4 border-2 border-error text-error hover:bg-error/5 rounded-full font-display text-headline-md transition-all duration-300 flex items-center justify-center gap-2 squishy-btn">
+        <span class="material-symbols-outlined text-[20px]">logout</span>
+        Sign Out of Account
+      </button>
+    </section>
+  </main>
+</div>
+
+<!-- ===================== SCREEN: TODAY ===================== -->
+<div class="screen" id="screen-today">
+  <header class="bg-surface font-headline-md text-headline-md w-full top-0 sticky z-40">
+    <div class="flex items-center justify-between px-container-padding py-4 w-full max-w-[800px] mx-auto">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary" style="font-size:32px;">filter_vintage</span>
+        <h1 class="font-display text-headline-md text-primary">Digital Garden</h1>
+      </div>
+      <div class="flex items-center gap-2 text-on-surface-variant">
+        <button class="p-2 hover:bg-surface-container-low transition-colors rounded-full active:scale-90">
+          <span class="material-symbols-outlined">search</span>
+        </button>
+        <div onclick="showScreen('profile')" class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center border-2 border-primary-container overflow-hidden cursor-pointer active:scale-95 transition-transform">
+          <span class="material-symbols-outlined text-primary vector-icon">person</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-container-padding pb-32">
+    <!-- Welcome -->
+    <section class="py-section-gap" id="welcome-section">
+      <p class="font-label-md text-label-md text-primary uppercase tracking-widest">Good Morning</p>
+      <h2 class="font-display text-headline-lg text-on-surface mt-1">Good morning, Alex</h2>
+      <p class="font-body-md text-on-surface-variant mt-2">Your garden is ready for some care today.</p>
+    </section>
+
+    <!-- Weekly View -->
+    <section class="mb-section-gap">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-label-md text-label-md text-on-surface-variant">WEEKLY VIEW</h3>
+        <span class="font-label-sm text-label-sm text-primary" id="weekly-pct">0% COMPLETE</span>
+      </div>
+      <div class="flex gap-3 overflow-x-auto pb-2" id="week-strip">
+        <!-- Generated by JS -->
+      </div>
+    </section>
+
+    <!-- Habit List -->
+    <section class="space-y-stack-gap">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-label-md text-label-md text-on-surface-variant">TODAY'S HABITS</h3>
+      </div>
+
+      <div id="habit-list" class="space-y-stack-gap"></div>
+      <div id="empty-state" class="hidden text-center py-12">
+        <span class="material-symbols-outlined text-tertiary-container vector-icon" style="font-size:56px;">eco</span>
+        <p class="font-headline-md text-headline-md text-on-surface-variant mt-4">Your garden is empty</p>
+        <p class="font-body-md text-on-surface-variant mt-2">Tap + to plant your first habit</p>
+      </div>
+    </section>
+
+    <!-- Stats Bento -->
+    <section class="mt-section-gap grid grid-cols-2 gap-4">
+      <div class="col-span-2 md:col-span-1 glass-card p-6 rounded-lg soft-shadow flex flex-col justify-between h-48 border border-primary-container/20">
+        <span class="material-symbols-outlined text-primary" style="font-size:32px;">diamond</span>
+        <div>
+          <p class="font-headline-lg text-headline-lg text-primary font-bold" id="seeds-count">0</p>
+          <p class="font-label-md text-label-md text-on-primary-container">Seeds Gathered</p>
+        </div>
+      </div>
+      <div class="col-span-2 md:col-span-1 glass-card p-6 rounded-lg soft-shadow flex flex-col justify-between h-48 border border-secondary-container/20">
+        <span class="material-symbols-outlined text-secondary" style="font-size:32px;">opacity</span>
+        <div>
+          <p class="font-headline-lg text-headline-lg text-secondary font-bold" id="streak-pct">0%</p>
+          <p class="font-label-md text-label-md text-on-secondary-container">Completion Rate</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FAB -->
+  <button onclick="showScreen('add-habit')" class="fixed right-6 bottom-32 w-14 h-14 rounded-full bg-primary text-white shadow-lg flex items-center justify-center active:scale-90 transition-transform z-40 primary-btn-bounce">
+    <span class="material-symbols-outlined text-[32px]">add</span>
+  </button>
+
+  <!-- Bottom Nav -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-8 pt-4 bg-surface-container-low/80 backdrop-blur-md rounded-t-lg shadow-[0_-4px_20px_rgba(148,74,24,0.08)]">
+    <a onclick="showScreen('today')" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container organic-blob px-8 py-2 cursor-pointer transition-all">
+      <span class="material-symbols-outlined active-icon">today</span>
+      <span class="font-label-md text-label-md mt-1">Today</span>
+    </a>
+    <a onclick="showScreen('insights')" class="flex flex-col items-center justify-center text-on-surface-variant px-8 py-2 hover:text-primary cursor-pointer transition-all">
+      <span class="material-symbols-outlined">monitoring</span>
+      <span class="font-label-md text-label-md mt-1">Insights</span>
+    </a>
+  </nav>
+</div>
+
+<!-- ===================== SCREEN: ADD HABIT ===================== -->
+<div class="screen" id="screen-add-habit">
+  <header class="w-full top-0 sticky bg-surface z-30">
+    <div class="flex items-center justify-between px-container-padding py-4 w-full max-w-[800px] mx-auto">
+      <button onclick="showScreen('today')" class="flex items-center justify-center p-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-90">
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+      <h1 class="font-headline-md text-headline-md text-on-surface" id="add-screen-title">Start something new</h1>
+      <div class="w-10"></div>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-container-padding pb-32 slide-up">
+    <!-- Habit Name Input -->
+    <section class="mt-section-gap">
+      <h2 class="font-headline-md text-headline-md text-on-surface mb-4">What's the habit?</h2>
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-tertiary-container" id="input-icon">edit_note</span>
+        <input id="habit-name-input" type="text" placeholder="e.g. Morning meditation"
+          class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-2 border-tertiary-fixed rounded-full font-body-md text-body-md text-on-surface placeholder:text-tertiary-container focus:outline-none focus:border-primary transition-colors"/>
+      </div>
+    </section>
+
+    <!-- Icon Selector -->
+    <section class="mt-section-gap space-y-stack-gap">
+      <h2 class="font-headline-md text-headline-md text-on-surface">Choose an icon</h2>
+      <div class="grid grid-cols-5 gap-4 bg-surface-container-low p-6 rounded-lg" id="icon-grid">
+        <!-- icons injected by JS -->
+      </div>
+    </section>
+
+    <!-- Frequency & Category -->
+    <section class="mt-section-gap space-y-8">
+      <div class="space-y-4">
+        <h2 class="font-headline-md text-headline-md text-on-surface">Frequency</h2>
+        <div class="flex gap-3">
+          <button onclick="selectFreq(this,'Daily')" class="freq-btn px-6 py-3 bg-primary-container text-on-primary-container font-label-md text-label-md border-2 border-primary-container transition-all squishy-btn organic-blob">Daily</button>
+          <button onclick="selectFreq(this,'Weekly')" class="freq-btn px-6 py-3 rounded-full bg-surface-container border-2 border-tertiary-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-all squishy-btn">Weekly</button>
+          <button onclick="selectFreq(this,'Custom')" class="freq-btn px-6 py-3 rounded-full bg-surface-container border-2 border-tertiary-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-all squishy-btn">Custom</button>
+        </div>
+      </div>
+
+
+
+      <!-- Reminder Toggle -->
+      <div class="flex items-center justify-between p-6 bg-surface-container-low rounded-lg shadow-[0_4px_20px_rgba(148,74,24,0.04)]">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-secondary-container flex items-center justify-center rounded-full">
+            <span class="material-symbols-outlined text-on-secondary-container vector-icon">notifications</span>
+          </div>
+          <div>
+            <p class="font-label-md text-label-md text-on-surface">Remind me</p>
+            <p class="font-label-sm text-label-sm text-on-surface-variant">Stay on track with notifications</p>
+          </div>
+        </div>
+        <button class="relative inline-flex h-8 w-14 items-center rounded-full bg-surface-container-highest transition-colors duration-300" id="reminder-toggle" onclick="toggleReminder()">
+          <span class="inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform duration-300 translate-x-1" id="toggle-circle"></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Hero image -->
+    <section class="mt-section-gap">
+      <div class="relative overflow-hidden rounded-lg aspect-[16/7] group">
+        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          src="img/hero.png"
+          alt="A seedling emerging from soil"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+        <div class="absolute bottom-4 left-6 right-6 text-white">
+          <p class="font-headline-md text-headline-md leading-tight">Every garden starts with a single seed.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer Button -->
+  <footer class="fixed bottom-0 left-0 w-full p-container-padding bg-gradient-to-t from-surface via-surface/90 to-transparent z-40">
+    <div class="max-w-[800px] mx-auto">
+      <button onclick="plantHabit()" class="w-full py-5 bg-primary text-white rounded-full font-display text-headline-md shadow-[0_8px_30px_rgba(148,74,24,0.25)] hover:bg-primary/90 hover:translate-y-[-2px] active:translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-3 squishy-btn primary-btn-bounce">
+        <span class="material-symbols-outlined vector-icon" id="plant-btn-icon" style="font-variation-settings:'FILL' 1;">eco</span>
+        <span id="plant-btn-text">Plant this habit</span>
+      </button>
+    </div>
+  </footer>
+</div>
+
+<!-- ===================== SCREEN: CELEBRATION ===================== -->
+<div class="screen" id="screen-celebration">
+  <main class="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden px-container-padding" style="background: radial-gradient(circle at center, #ffffff 0%, #fcf9f4 100%);">
+    <div class="absolute inset-0 z-0" id="particle-container"></div>
+
+    <!-- Illustration -->
+    <div class="relative w-full max-w-[400px] aspect-square flex items-center justify-center mb-section-gap z-20">
+      <div class="absolute w-64 h-64 bg-primary-container opacity-20 blur-[80px] rounded-full"></div>
+      <div class="relative w-full h-full rounded-xl overflow-hidden bloom-shadow">
+        <img alt="Sun rising over rolling green hills" class="w-full h-full object-cover rounded-xl"
+          src="img/sunrise.png"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-surface/30 to-transparent"></div>
+      </div>
+      <div class="absolute -bottom-4 -right-4 bg-secondary-container p-5 rounded-2xl shadow-xl animate-float">
+        <span class="material-symbols-outlined text-on-secondary-container text-[40px] block" style="font-variation-settings: 'FILL' 0, 'wght' 500;">eco</span>
+      </div>
+    </div>
+
+    <!-- Text -->
+    <div class="text-center z-20 space-y-4 max-w-[500px]">
+      <h1 class="font-display text-headline-lg-mobile md:text-headline-lg text-primary">
+        You're glowing! All habits done for today.
+      </h1>
+      <p class="font-body-lg text-on-surface-variant">
+        Take a moment to breathe. Your digital garden is thriving because of your care.
+      </p>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 gap-stack-gap w-full max-w-[400px] mt-section-gap z-20">
+      <div class="glass-card p-6 rounded-lg flex flex-col items-center justify-center text-center border-2 border-transparent celebration-card">
+        <span class="font-display text-headline-md text-primary" id="cel-done">0/0</span>
+        <span class="font-label-md text-on-surface-variant">Habits Done</span>
+      </div>
+      <div class="glass-card p-6 rounded-lg flex flex-col items-center justify-center text-center border-2 border-transparent celebration-card">
+        <span class="font-display text-headline-md text-secondary" id="cel-streak">0 Days</span>
+        <span class="font-label-md text-on-surface-variant">Best Streak</span>
+      </div>
+    </div>
+
+    <!-- Button -->
+    <div class="mt-section-gap z-20 w-full max-w-[400px]">
+      <button onclick="showScreen('today')" class="group relative w-full bg-primary text-on-primary py-touch-target rounded-full font-label-md transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2 primary-btn-bounce">
+        <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 0, 'wght' 600;">bedtime</span>
+        <span>Rest &amp; Recharge</span>
+      </button>
+    </div>
+  </main>
+</div>
+
+<!-- ===================== SCREEN: INSIGHTS ===================== -->
+<div class="screen" id="screen-insights">
+  <header class="bg-surface w-full top-0 sticky z-40">
+    <div class="flex items-center justify-between px-container-padding py-4 w-full max-w-[800px] mx-auto">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary" style="font-size:32px;">filter_vintage</span>
+        <h1 class="font-display text-headline-md text-primary">Digital Garden</h1>
+      </div>
+      <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center border-2 border-primary-container">
+        <span class="material-symbols-outlined text-primary vector-icon">person</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[800px] mx-auto px-container-padding pb-32">
+    <section class="py-section-gap">
+      <h2 class="font-display text-headline-lg text-on-surface">Your Insights</h2>
+      <p class="font-body-md text-on-surface-variant mt-1">See how your garden has grown.</p>
+    </section>
+
+    <!-- Overview Cards -->
+    <section class="grid grid-cols-3 gap-3 mb-section-gap">
+      <div class="glass-card p-4 rounded-lg border border-primary-container/20 text-center">
+        <p class="font-headline-lg text-headline-md text-primary font-bold" id="ins-total-habits">0</p>
+        <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Total Habits</p>
+      </div>
+      <div class="glass-card p-4 rounded-lg border border-secondary-container/20 text-center">
+        <p class="font-headline-lg text-headline-md text-secondary font-bold" id="ins-best-streak">0</p>
+        <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Best Streak</p>
+      </div>
+      <div class="glass-card p-4 rounded-lg border border-tertiary-container/20 text-center">
+        <p class="font-headline-lg text-headline-md text-tertiary font-bold" id="ins-done-today">0</p>
+        <p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Done Today</p>
+      </div>
+    </section>
+
+    <!-- Weekly Bar Chart -->
+    <section class="glass-card rounded-lg p-6 soft-shadow mb-section-gap">
+      <h3 class="font-label-md text-label-md text-on-surface-variant mb-6">THIS WEEK'S COMPLETION</h3>
+      <div class="flex items-end justify-between gap-2 h-32" id="bar-chart">
+        <!-- Generated by JS -->
+      </div>
+    </section>
+
+    <!-- Habit Breakdown -->
+    <section class="space-y-stack-gap">
+      <h3 class="font-label-md text-label-md text-on-surface-variant">HABIT BREAKDOWN</h3>
+      <div id="insights-habit-list" class="space-y-3"></div>
+    </section>
+  </main>
+
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-8 pt-4 bg-surface-container-low/80 backdrop-blur-md rounded-t-lg shadow-[0_-4px_20px_rgba(148,74,24,0.08)]">
+    <a onclick="showScreen('today')" class="flex flex-col items-center justify-center text-on-surface-variant px-8 py-2 hover:text-primary cursor-pointer transition-all">
+      <span class="material-symbols-outlined">today</span>
+      <span class="font-label-md text-label-md mt-1">Today</span>
+    </a>
+    <a onclick="showScreen('insights')" class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container organic-blob px-8 py-2 cursor-pointer transition-all">
+      <span class="material-symbols-outlined active-icon">monitoring</span>
+      <span class="font-label-md text-label-md mt-1">Insights</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+// ============ STATE ============
+const ICONS = [
+  {icon:'potted_plant', color:'text-secondary'},
+  {icon:'water_drop', color:'text-[#3b82f6]'},
+  {icon:'self_improvement', color:'text-primary'},
+  {icon:'menu_book', color:'text-tertiary'},
+  {icon:'nutrition', color:'text-error'},
+  {icon:'directions_run', color:'text-secondary'},
+  {icon:'palette', color:'text-[#a855f7]'},
+  {icon:'bedtime', color:'text-[#64748b]'},
+  {icon:'coffee', color:'text-[#854d0e]'},
+  {icon:'light_mode', color:'text-[#f59e0b]'},
+];
+
+const DAYS = ['S','M','T','W','T','F','S'];
+
+// Credentials placeholders (Live Supabase Integration)
+const SUPABASE_URL = 'https://fhamvnckhaqwrlwjthla.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_QpLVqh0tWylmNxekKJ67PA_5DqiCLz-';
+
+let supabase = null;
+if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+  try {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch(e) {
+    console.error("Failed to initialize Supabase client:", e);
+  }
+}
+
+let state = {
+  user: null,
+  habits: [],
+  history: {},
+  selectedIcon: 'self_improvement',
+  selectedIconColor: 'text-primary',
+  selectedFreq: 'Daily',
+  currentFilter: 'All',
+  editingHabitId: null,
+  activeActionsHabitId: null,
+};
+
+let pressTimer;
+let authMode = 'login';
+let selectedProfileAvatarIcon = 'person';
+
+let onboardingStep = 0;
+const ONBOARDING_DATA = [
+  {
+    title: "Welcome to your Digital Garden",
+    text: "Plant habits like seeds, nourish them daily, and watch your personal garden bloom over time.",
+    icon: "filter_vintage"
+  },
+  {
+    title: "Nourish them Daily",
+    text: "Check off your daily tasks to accumulate streak multipliers, earn rare plant seeds, and grow beautiful stats bentos.",
+    icon: "local_fire_department"
+  },
+  {
+    title: "See Your Insights",
+    text: "Visualize your streak progress and completion curves over time on our premium, live charts.",
+    icon: "monitoring"
+  }
+];
+
+function todayKey() {
+  return new Date().toISOString().slice(0,10);
+}
+
+function getStreak(habitId) {
+  let streak = 0;
+  const d = new Date();
+  while(true) {
+    const key = d.toISOString().slice(0,10);
+    const checked = key === todayKey()
+      ? (state.history[key]||[]).includes(habitId)
+      : (state.history[key]||[]).includes(habitId);
+    if (!checked) break;
+    streak++;
+    d.setDate(d.getDate()-1);
+  }
+  return streak;
+}
+
+function isChecked(id) {
+  return (state.history[todayKey()]||[]).includes(id);
+}
+
+async function toggleHabit(id) {
+  const key = todayKey();
+  if (!state.history[key]) state.history[key] = [];
+  const idx = state.history[key].indexOf(id);
+  
+  if (idx === -1) {
+    state.history[key].push(id);
+    if (supabase) {
+      await supabase.from('completions').insert([
+        { habit_id: id, user_id: state.user.id, completed_date: key }
+      ]);
+    }
+  } else {
+    state.history[key].splice(idx,1);
+    if (supabase) {
+      await supabase.from('completions').delete().eq('habit_id', id).eq('completed_date', key);
+    }
+  }
+  
+  saveLocalData();
+  renderHabits();
+  renderWeek();
+  updateStats();
+  checkAllDone();
+}
+
+function checkAllDone() {
+  const done = state.habits.filter(h => isChecked(h.id));
+  if (state.habits.length > 0 && done.length === state.habits.length) {
+    setTimeout(() => showScreen('celebration'), 600);
+  }
+}
+
+// ============ SCREENS ============
+
+function showScreen(name) {
+  if (!state.user && name !== 'auth') {
+    name = 'auth';
+  }
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  window.scrollTo(0,0);
+  if (name === 'today') { 
+    // Reset Add Habit form when returning to today
+    document.getElementById('habit-name-input').value = '';
+    state.editingHabitId = null;
+    document.getElementById('add-screen-title').textContent = 'Start something new';
+    document.getElementById('plant-btn-text').textContent = 'Plant this habit';
+    document.getElementById('plant-btn-icon').textContent = 'eco';
+    
+    // Reset selected freq buttons visual state
+    document.querySelectorAll('.freq-btn').forEach(b => {
+      b.classList.remove('bg-primary-container','text-on-primary-container','border-primary-container','organic-blob');
+      b.classList.add('bg-surface-container','border-tertiary-container','text-on-surface-variant','rounded-full');
+    });
+    const defaultFreqBtn = Array.from(document.querySelectorAll('.freq-btn')).find(b => b.textContent.trim() === 'Daily');
+    if (defaultFreqBtn) {
+      defaultFreqBtn.classList.add('bg-primary-container','text-on-primary-container','border-primary-container','organic-blob');
+      defaultFreqBtn.classList.remove('bg-surface-container','border-tertiary-container','text-on-surface-variant','rounded-full');
+    }
+
+    renderHabits(); 
+    renderWeek(); 
+    updateStats(); 
+  }
+  if (name === 'add-habit') { renderIconGrid(); }
+  if (name === 'celebration') { renderCelebration(); createParticles(); }
+  if (name === 'insights') { renderInsights(); }
+  if (name === 'profile') { renderProfile(); }
+}
+
+// ============ TODAY ============
+function renderWeek() {
+  const strip = document.getElementById('week-strip');
+  strip.innerHTML = '';
+  const today = new Date();
+  let completedDays = 0;
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - i);
+    const key = d.toISOString().slice(0,10);
+    const isToday = i === 0;
+    const checkedCount = (state.history[key]||[]).length;
+    const total = state.habits.length;
+    const allDone = total > 0 && checkedCount >= total;
+    const partial = checkedCount > 0 && !allDone;
+    if (isToday && allDone) completedDays++;
+    else if (allDone) completedDays++;
+
+    let dotClasses = 'w-10 h-10 rounded-full border-2 flex items-center justify-center';
+    if (isToday && allDone) dotClasses += ' bg-secondary border-secondary';
+    else if (isToday) dotClasses += ' bg-primary border-primary';
+    else if (allDone) dotClasses += ' bg-secondary-container border-secondary';
+    else if (partial) dotClasses += ' bg-primary-container/40 border-primary-container';
+    else dotClasses += ' border-outline-variant';
+
+    const textColor = (isToday || allDone) ? 'text-white' : (partial ? 'text-primary' : 'text-on-surface-variant');
+
+    strip.innerHTML += `<div class="flex flex-col items-center gap-2 flex-shrink-0">
+      <span class="font-label-sm text-label-sm text-on-surface-variant">${DAYS[d.getDay()]}</span>
+      <div class="${dotClasses}">
+        ${allDone ? '<span class="material-symbols-outlined text-white text-[16px]" style="font-variation-settings:\'FILL\' 1;">check</span>' : `<span class="font-label-sm text-label-sm ${textColor}">${d.getDate()}</span>`}
+      </div>
+    </div>`;
+  }
+  const pct = state.habits.length > 0
+    ? Math.round(((state.history[todayKey()]||[]).length / state.habits.length) * 100)
+    : 0;
+  document.getElementById('weekly-pct').textContent = pct + '% COMPLETE';
+}
+
+
+
+function renderHabits() {
+  const list = document.getElementById('habit-list');
+  const empty = document.getElementById('empty-state');
+  
+  let filtered = state.habits;
+  
+  if (filtered.length === 0) {
+    list.innerHTML = '';
+    empty.classList.remove('hidden');
+    return;
+  }
+  empty.classList.add('hidden');
+  list.innerHTML = filtered.map(h => {
+    const done = isChecked(h.id);
+    const streak = getStreak(h.id);
+    const btnClass = done
+      ? 'w-14 h-14 rounded-full border-2 border-secondary-container bg-secondary-container flex items-center justify-center text-secondary transition-all active:scale-95'
+      : 'w-14 h-14 rounded-full border-2 border-surface-container flex items-center justify-center text-on-surface-variant hover:border-primary-container hover:text-primary transition-all active:scale-95';
+    const iconInner = done
+      ? `<span class="material-symbols-outlined text-[32px] bloom-animation" style="font-variation-settings:'FILL' 1;">spa</span>`
+      : `<span class="material-symbols-outlined text-[32px]">check_circle</span>`;
+    const showOverlay = state.activeActionsHabitId === h.id;
+    return `<div class="group relative glass-card rounded-lg p-container-padding flex items-center justify-between soft-shadow hover:bg-surface transition-all duration-300 transform hover:-translate-y-1 cursor-pointer select-none"
+      onmousedown="startPress('${h.id}')"
+      onmouseup="endPress()"
+      onmouseleave="endPress()"
+      ontouchstart="startPress('${h.id}')"
+      ontouchend="endPress()">
+      
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-full bg-tertiary-fixed flex items-center justify-center">
+          <span class="material-symbols-outlined ${h.iconColor} text-[32px] vector-icon">${h.icon}</span>
+        </div>
+        <div>
+          <h4 class="font-headline-md text-headline-md text-on-surface">${h.name}</h4>
+          <div class="flex items-center gap-2 mt-1">
+            <span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings:'FILL' 1;">local_fire_department</span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant">${streak} day streak</span>
+
+          </div>
+        </div>
+      </div>
+      
+      <button class="${btnClass}" onclick="toggleHabit('${h.id}'); event.stopPropagation();">${iconInner}</button>
+      
+      <!-- Management Overlay (Fades/Slides in on Long Press) -->
+      <div class="absolute inset-0 glass-card flex items-center justify-center gap-8 rounded-lg transition-all duration-300 ${showOverlay ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}" onclick="event.stopPropagation();">
+        <button class="flex flex-col items-center gap-1 text-primary active:scale-90 transition-transform squishy-btn" onclick="editHabit('${h.id}'); event.stopPropagation();">
+          <div class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-[24px]">edit</span>
+          </div>
+          <span class="font-label-sm text-label-sm text-primary font-bold">Edit</span>
+        </button>
+        
+        <button class="flex flex-col items-center gap-1 text-error active:scale-90 transition-transform squishy-btn" onclick="deleteHabit('${h.id}'); event.stopPropagation();">
+          <div class="w-12 h-12 bg-error/10 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-[24px]">delete</span>
+          </div>
+          <span class="font-label-sm text-label-sm text-error font-bold">Delete</span>
+        </button>
+        
+        <button class="flex flex-col items-center gap-1 text-on-surface-variant active:scale-90 transition-transform squishy-btn" onclick="hideActions(); event.stopPropagation();">
+          <div class="w-12 h-12 bg-surface-container rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-[24px]">close</span>
+          </div>
+          <span class="font-label-sm text-label-sm text-on-surface-variant font-bold">Cancel</span>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateStats() {
+  const checked = (state.history[todayKey()]||[]).length;
+  const total = state.habits.length;
+  const seeds = state.habits.reduce((acc, h) => acc + getStreak(h.id), 0);
+  document.getElementById('seeds-count').textContent = seeds;
+  document.getElementById('streak-pct').textContent = total > 0 ? Math.round((checked/total)*100) + '%' : '0%';
+}
+
+// ============ ADD HABIT ============
+function renderIconGrid() {
+  const grid = document.getElementById('icon-grid');
+  grid.innerHTML = ICONS.map((ic, i) => {
+    const selected = ic.icon === state.selectedIcon;
+    return `<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 ${selected ? 'border-primary bg-primary-container/20' : 'border-transparent bg-surface-container-lowest'} hover:border-primary-container transition-all squishy-btn shadow-sm" onclick="selectIcon(this,'${ic.icon}','${ic.color}')">
+      <span class="material-symbols-outlined vector-icon ${ic.color} text-[32px]">${ic.icon}</span>
+    </button>`;
+  }).join('');
+}
+
+function selectIcon(btn, icon, color) {
+  state.selectedIcon = icon;
+  state.selectedIconColor = color;
+  document.querySelectorAll('.emoji-chip').forEach(el => {
+    el.classList.remove('border-primary','bg-primary-container/20');
+    el.classList.add('border-transparent','bg-surface-container-lowest');
+  });
+  btn.classList.add('border-primary','bg-primary-container/20');
+  btn.classList.remove('border-transparent','bg-surface-container-lowest');
+  btn.style.transform = 'scale(0.9)';
+  setTimeout(() => btn.style.transform = 'scale(1)', 100);
+}
+
+function selectFreq(btn, freq) {
+  state.selectedFreq = freq;
+  document.querySelectorAll('.freq-btn').forEach(b => {
+    b.classList.remove('bg-primary-container','text-on-primary-container','border-primary-container','organic-blob');
+    b.classList.add('bg-surface-container','border-tertiary-container','text-on-surface-variant','rounded-full');
+  });
+  btn.classList.add('bg-primary-container','text-on-primary-container','border-primary-container','organic-blob');
+  btn.classList.remove('bg-surface-container','border-tertiary-container','text-on-surface-variant','rounded-full');
+}
+
+
+
+function toggleReminder() {
+  const toggle = document.getElementById('reminder-toggle');
+  const circle = document.getElementById('toggle-circle');
+  const isActive = toggle.classList.contains('bg-primary');
+  if (isActive) {
+    toggle.classList.remove('bg-primary'); toggle.classList.add('bg-surface-container-highest');
+    circle.classList.remove('translate-x-7'); circle.classList.add('translate-x-1');
+  } else {
+    toggle.classList.remove('bg-surface-container-highest'); toggle.classList.add('bg-primary');
+    circle.classList.remove('translate-x-1'); circle.classList.add('translate-x-7');
+  }
+}
+
+function startPress(id) {
+  if (pressTimer) clearTimeout(pressTimer);
+  pressTimer = setTimeout(() => {
+    state.activeActionsHabitId = id;
+    if (navigator.vibrate) navigator.vibrate(60);
+    renderHabits();
+  }, 600);
+}
+
+function endPress() {
+  if (pressTimer) clearTimeout(pressTimer);
+}
+
+function hideActions() {
+  state.activeActionsHabitId = null;
+  renderHabits();
+}
+
+// Global click listener to dismiss any active action overlays when tapping outside
+document.addEventListener('click', function(e) {
+  if (state.activeActionsHabitId) {
+    const card = e.target.closest('.group');
+    if (!card) {
+      hideActions();
+    }
+  }
+});
+
+// ============ AUTHENTICATION & SYNC CORE ============
+function toggleAuthMode() {
+  const errorDiv = document.getElementById('auth-error');
+  errorDiv.classList.add('hidden');
+  
+  if (authMode === 'login') {
+    authMode = 'signup';
+    document.getElementById('auth-subtitle').textContent = 'Join and bloom today.';
+    document.getElementById('auth-title').textContent = 'Create account';
+    document.getElementById('auth-submit-btn').querySelector('span').textContent = 'Sign Up';
+    document.getElementById('auth-toggle-text').textContent = 'Already have an account?';
+    document.getElementById('auth-toggle-btn').textContent = 'Sign In';
+  } else {
+    authMode = 'login';
+    document.getElementById('auth-subtitle').textContent = 'Nurture your daily growth.';
+    document.getElementById('auth-title').textContent = 'Welcome back';
+    document.getElementById('auth-submit-btn').querySelector('span').textContent = 'Sign In';
+    document.getElementById('auth-toggle-text').textContent = "Don't have an account?";
+    document.getElementById('auth-toggle-btn').textContent = 'Sign Up';
+  }
+}
+
+function showAuthError(msg) {
+  const errorDiv = document.getElementById('auth-error');
+  errorDiv.textContent = msg;
+  errorDiv.classList.remove('hidden');
+}
+
+async function handleAuthSubmit() {
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  
+  if (!email || !password) {
+    showAuthError("Please fill out all fields.");
+    return;
+  }
+  
+  if (!supabase) {
+    // Sandbox simulation
+    state.user = { id: 'sandbox_user', email: email };
+    localStorage.setItem('bloom_sandbox_user', JSON.stringify(state.user));
+    await loadUserData();
+    checkOnboarding();
+    return;
+  }
+  
+  try {
+    let result;
+    if (authMode === 'login') {
+      result = await supabase.auth.signInWithPassword({ email, password });
+    } else {
+      result = await supabase.auth.signUp({ email, password });
+    }
+    
+    if (result.error) throw result.error;
+    
+    state.user = result.data.user;
+    await loadUserData();
+    checkOnboarding();
+  } catch (error) {
+    console.error("Auth error:", error);
+    showAuthError(error.message || "An authentication error occurred.");
+  }
+}
+
+async function logout() {
+  if (supabase) {
+    await supabase.auth.signOut();
+  }
+  state.user = null;
+  localStorage.removeItem('bloom_sandbox_user');
+  showScreen('auth');
+}
+
+async function loadUserData() {
+  if (!supabase || !state.user) {
+    loadLocalData();
+    return;
+  }
+  
+  try {
+    // Habits
+    const { data: habitsData, error: habitsError } = await supabase
+      .from('habits')
+      .select('*')
+      .eq('user_id', state.user.id);
+    
+    if (habitsError) throw habitsError;
+    state.habits = habitsData || [];
+
+    // Completions
+    const { data: compData, error: compError } = await supabase
+      .from('completions')
+      .select('*')
+      .eq('user_id', state.user.id);
+      
+    if (compError) throw compError;
+    
+    state.history = {};
+    if (compData) {
+      compData.forEach(c => {
+        const date = c.completed_date;
+        if (!state.history[date]) state.history[date] = [];
+        state.history[date].push(c.habit_id);
+      });
+    }
+  } catch (error) {
+    console.error("Error loading user data from Supabase:", error);
+    showAuthError("Cloud fetch failed. Loading local data.");
+    loadLocalData();
+  }
+  
+  renderHabits();
+  renderWeek();
+  updateStats();
+  renderProfile();
+}
+
+function loadLocalData() {
+  const habits = localStorage.getItem('bloom_habits');
+  const history = localStorage.getItem('bloom_history');
+  state.habits = habits ? JSON.parse(habits) : [
+    { id: '1', name: 'Morning Yoga', icon: 'self_improvement', iconColor: 'text-primary', freq: 'Daily' },
+    { id: '2', name: 'Read 10 pages', icon: 'menu_book', iconColor: 'text-tertiary', freq: 'Daily' },
+    { id: '3', name: 'Hydrate', icon: 'water_drop', iconColor: 'text-[#3b82f6]', freq: 'Daily' }
+  ];
+  state.history = history ? JSON.parse(history) : {};
+  
+  renderHabits();
+  renderWeek();
+  updateStats();
+}
+
+function saveLocalData() {
+  localStorage.setItem('bloom_habits', JSON.stringify(state.habits));
+  localStorage.setItem('bloom_history', JSON.stringify(state.history));
+}
+
+// ============ PROFILE MANAGEMENT ============
+function selectProfileAvatar(iconName) {
+  selectedProfileAvatarIcon = iconName;
+  document.querySelectorAll('.avatar-chip').forEach(btn => {
+    btn.classList.remove('border-primary', 'bg-primary-container/20');
+    btn.classList.add('border-transparent', 'bg-surface-container');
+    btn.querySelector('span').classList.remove('text-primary');
+    btn.querySelector('span').classList.add('text-on-surface-variant');
+  });
+  
+  const activeBtn = Array.from(document.querySelectorAll('.avatar-chip')).find(b => b.querySelector('span').textContent.trim() === iconName);
+  if (activeBtn) {
+    activeBtn.classList.add('border-primary', 'bg-primary-container/20');
+    activeBtn.classList.remove('border-transparent', 'bg-surface-container');
+    activeBtn.querySelector('span').classList.add('text-primary');
+    activeBtn.querySelector('span').classList.remove('text-on-surface-variant');
+  }
+}
+
+async function renderProfile() {
+  if (!state.user) return;
+  
+  document.getElementById('profile-email-display').textContent = state.user.email;
+  
+  let name = state.user.email.split('@')[0];
+  let avatar = 'person';
+  
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('full_name, avatar_url')
+        .eq('id', state.user.id)
+        .single();
+      
+      if (data) {
+        name = data.full_name || name;
+        avatar = data.avatar_url || avatar;
+      }
+    } catch (e) {
+      console.error("Error loading profile from Supabase:", e);
+    }
+  } else {
+    name = localStorage.getItem('bloom_profile_name') || name;
+    avatar = localStorage.getItem('bloom_profile_avatar') || avatar;
+  }
+  
+  document.getElementById('profile-name-display').textContent = name;
+  document.getElementById('profile-name-input').value = name;
+  
+  document.getElementById('profile-avatar-display').textContent = avatar;
+  selectProfileAvatar(avatar);
+  
+  document.querySelector('#welcome-section h2').textContent = `Good morning, ${name}`;
+}
+
+async function saveProfile() {
+  const name = document.getElementById('profile-name-input').value.trim();
+  if (!name) return;
+  
+  if (supabase) {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .upsert({
+          id: state.user.id,
+          full_name: name,
+          avatar_url: selectedProfileAvatarIcon,
+          updated_at: new Date().toISOString()
+        });
+      if (error) throw error;
+      alert("Profile updated successfully!");
+    } catch (e) {
+      console.error("Error updating profile:", e);
+      alert("Error updating profile: " + e.message);
+    }
+  } else {
+    localStorage.setItem('bloom_profile_name', name);
+    localStorage.setItem('bloom_profile_avatar', selectedProfileAvatarIcon);
+    alert("Profile saved locally!");
+  }
+  
+  await renderProfile();
+  showScreen('today');
+}
+
+// ============ ONBOARDING MODULE ============
+function nextOnboardingStep() {
+  onboardingStep++;
+  if (onboardingStep >= ONBOARDING_DATA.length) {
+    localStorage.setItem('bloom_onboarded', 'true');
+    showScreen('today');
+    return;
+  }
+  
+  const step = ONBOARDING_DATA[onboardingStep];
+  document.getElementById('onboarding-title').textContent = step.title;
+  document.getElementById('onboarding-text').textContent = step.text;
+  document.getElementById('onboarding-icon').textContent = step.icon;
+  
+  for (let i = 0; i < 3; i++) {
+    const dot = document.getElementById('dot-' + i);
+    if (i === onboardingStep) {
+      dot.classList.add('bg-primary');
+      dot.classList.remove('bg-surface-container-highest');
+    } else {
+      dot.classList.remove('bg-primary');
+      dot.classList.add('bg-surface-container-highest');
+    }
+  }
+  
+  if (onboardingStep === ONBOARDING_DATA.length - 1) {
+    document.getElementById('onboarding-next-btn').querySelector('span').textContent = "Get Started";
+  }
+}
+
+async function deleteHabit(id) {
+  state.activeActionsHabitId = null;
+  if (confirm("Are you sure you want to remove this habit?")) {
+    if (supabase) {
+      await supabase.from('habits').delete().eq('id', id);
+    }
+    state.habits = state.habits.filter(h => h.id !== id);
+    saveLocalData();
+    renderHabits();
+    updateStats();
+  } else {
+    renderHabits();
+  }
+}
+
+function editHabit(id) {
+  state.editingHabitId = id;
+  const habit = state.habits.find(h => h.id === id);
+  if (!habit) return;
+  
+  // Pre-populate input name
+  document.getElementById('habit-name-input').value = habit.name;
+  
+  // Pre-populate icons
+  state.selectedIcon = habit.icon;
+  state.selectedIconColor = habit.iconColor;
+  renderIconGrid(); // Refresh grid so active icon is highlighted
+  
+  // Pre-populate frequency
+  selectFreq(Array.from(document.querySelectorAll('.freq-btn')).find(b => b.textContent.trim() === habit.freq) || document.querySelector('.freq-btn'), habit.freq);
+  
+
+  
+  // Update texts to editing mode
+  document.getElementById('add-screen-title').textContent = 'Edit habit';
+  document.getElementById('plant-btn-text').textContent = 'Save changes';
+  document.getElementById('plant-btn-icon').textContent = 'check';
+  
+  showScreen('add-habit');
+}
+
+async function plantHabit() {
+  const name = document.getElementById('habit-name-input').value.trim();
+  if (!name) {
+    document.getElementById('habit-name-input').classList.add('border-error');
+    setTimeout(() => document.getElementById('habit-name-input').classList.remove('border-error'), 1000);
+    return;
+  }
+  
+  if (state.editingHabitId) {
+    // Edit Mode
+    const habit = state.habits.find(h => h.id === state.editingHabitId);
+    if (habit) {
+      habit.name = name;
+      habit.icon = state.selectedIcon;
+      habit.iconColor = state.selectedIconColor;
+      habit.freq = state.selectedFreq;
+      
+      if (supabase) {
+        await supabase.from('habits').update({
+          name: name,
+          icon: state.selectedIcon,
+          icon_color: state.selectedIconColor,
+          frequency: state.selectedFreq
+        }).eq('id', state.editingHabitId);
+      }
+    }
+    state.editingHabitId = null;
+  } else {
+    // Plant Mode
+    const newId = Date.now().toString();
+    const newHabit = { id: newId, name, icon: state.selectedIcon, iconColor: state.selectedIconColor, freq: state.selectedFreq };
+    state.habits.push(newHabit);
+    
+    if (supabase) {
+      await supabase.from('habits').insert([
+        { user_id: state.user.id, name, icon: state.selectedIcon, icon_color: state.selectedIconColor, frequency: state.selectedFreq }
+      ]);
+    }
+  }
+  
+  saveLocalData();
+  
+  // Reset form
+  document.getElementById('habit-name-input').value = '';
+  state.selectedIcon = 'self_improvement';
+  state.selectedIconColor = 'text-primary';
+  
+  // Reset title & button labels
+  document.getElementById('add-screen-title').textContent = 'Start something new';
+  document.getElementById('plant-btn-text').textContent = 'Plant this habit';
+  document.getElementById('plant-btn-icon').textContent = 'eco';
+  
+  await loadUserData();
+  showScreen('today');
+}
+
+// ============ CELEBRATION ============
+function renderCelebration() {
+  const done = state.habits.filter(h => isChecked(h.id)).length;
+  const total = state.habits.length;
+  const bestStreak = Math.max(0, ...state.habits.map(h => getStreak(h.id)));
+  document.getElementById('cel-done').textContent = done + '/' + total;
+  document.getElementById('cel-streak').textContent = bestStreak + ' Days';
+}
+
+function createParticles() {
+  const container = document.getElementById('particle-container');
+  container.innerHTML = '';
+  const colors = ['#ff9f66','#c6e9c7','#f2e0ca','#ffdbc9'];
+  for (let i = 0; i < 24; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 8 + 4;
+    p.style.width = size + 'px'; p.style.height = size + 'px';
+    p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    p.style.opacity = Math.random() * 0.4 + 0.2;
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.animate([
+      {transform:'translate(0,0) rotate(0deg)', opacity:0},
+      {transform:`translate(${Math.random()*100-50}px,${Math.random()*-200}px) rotate(${Math.random()*360}deg)`, opacity:0.5},
+      {transform:`translate(${Math.random()*200-100}px,${Math.random()*-400}px) rotate(${Math.random()*720}deg)`, opacity:0}
+    ], { duration: (Math.random()*10+10)*1000, iterations: Infinity, delay: Math.random()*5000, easing:'ease-in-out' });
+    container.appendChild(p);
+  }
+}
+
+// ============ INSIGHTS ============
+function renderInsights() {
+  document.getElementById('ins-total-habits').textContent = state.habits.length;
+  const bestStreak = Math.max(0, ...state.habits.map(h => getStreak(h.id)));
+  document.getElementById('ins-best-streak').textContent = bestStreak;
+  document.getElementById('ins-done-today').textContent = (state.history[todayKey()]||[]).length;
+
+  // Bar chart - last 7 days
+  const chart = document.getElementById('bar-chart');
+  const total = state.habits.length || 1;
+  chart.innerHTML = '';
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const key = d.toISOString().slice(0,10);
+    const pct = Math.round(((state.history[key]||[]).length / total) * 100);
+    const isToday = i === 0;
+    chart.innerHTML += `<div class="flex flex-col items-center gap-2 flex-1">
+      <span class="font-label-sm text-label-sm text-on-surface-variant">${pct}%</span>
+      <div class="w-full rounded-full overflow-hidden flex flex-col justify-end" style="height:80px;background:#f0ede9;">
+        <div class="w-full rounded-full transition-all duration-700" style="height:${pct}%;background:${isToday ? '#944a18' : '#ff9f66'};"></div>
+      </div>
+      <span class="font-label-sm text-label-sm text-on-surface-variant">${DAYS[d.getDay()]}</span>
+    </div>`;
+  }
+
+  // Habit breakdown
+  const breakdown = document.getElementById('insights-habit-list');
+  if (state.habits.length === 0) {
+    breakdown.innerHTML = '<p class="font-body-md text-on-surface-variant text-center py-8">No habits yet. Add some to see your progress!</p>';
+    return;
+  }
+  breakdown.innerHTML = state.habits.map(h => {
+    const streak = getStreak(h.id);
+    const done = isChecked(h.id);
+    return `<div class="glass-card rounded-lg p-4 flex items-center justify-between soft-shadow">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center">
+          <span class="material-symbols-outlined ${h.iconColor} vector-icon" style="font-size:20px;">${h.icon}</span>
+        </div>
+        <div>
+          <p class="font-label-md text-label-md text-on-surface">${h.name}</p>
+          <p class="font-label-sm text-label-sm text-on-surface-variant">${streak} day streak</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        ${done ? '<span class="bg-secondary-container text-on-secondary-container font-label-sm text-label-sm px-3 py-1 rounded-full">Done</span>' : '<span class="bg-surface-container text-on-surface-variant font-label-sm text-label-sm px-3 py-1 rounded-full">Pending</span>'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ============ INIT ============
+async function init() {
+  const localUser = localStorage.getItem('bloom_sandbox_user');
+  if (localUser) {
+    state.user = JSON.parse(localUser);
+  }
+  
+  if (supabase) {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session) {
+        state.user = session.user;
+        await loadUserData();
+        checkOnboarding();
+      } else {
+        showScreen('auth');
+      }
+    });
+
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session) {
+        state.user = session.user;
+        await loadUserData();
+        checkOnboarding();
+      } else {
+        state.user = null;
+        showScreen('auth');
+      }
+    });
+  } else {
+    document.getElementById('local-mode-banner').classList.remove('hidden');
+    if (state.user) {
+      await loadUserData();
+      checkOnboarding();
+    } else {
+      showScreen('auth');
+    }
+  }
+}
+
+function checkOnboarding() {
+  const onboarded = localStorage.getItem('bloom_onboarded');
+  if (!onboarded) {
+    showScreen('onboarding');
+  } else {
+    showScreen('today');
+  }
+}
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker registered successfully:', reg.scope))
+      .catch(err => console.error('Service Worker registration failed:', err));
+  });
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Start Something New - Digital Garden</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Quicksand:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fcf9f4",
+                        "surface-dim": "#dcdad5",
+                        "on-tertiary-fixed": "#231a0d",
+                        "secondary-fixed": "#c8ebca",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#31302d",
+                        "outline-variant": "#dac2b6",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e5e2dd",
+                        "inverse-primary": "#ffb68d",
+                        "surface-tint": "#944a18",
+                        "primary": "#944a18",
+                        "on-secondary-container": "#4b6a4f",
+                        "tertiary-fixed-dim": "#d5c4af",
+                        "outline": "#877369",
+                        "on-tertiary-fixed-variant": "#514535",
+                        "surface-container": "#f0ede9",
+                        "on-secondary-fixed": "#03210c",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#ebe8e3",
+                        "on-surface-variant": "#54433a",
+                        "surface-container-low": "#f6f3ee",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#c6e9c7",
+                        "surface": "#fcf9f4",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#331200",
+                        "primary-container": "#ff9f66",
+                        "on-secondary-fixed-variant": "#304d35",
+                        "tertiary-fixed": "#f2e0ca",
+                        "on-error-container": "#93000a",
+                        "background": "#fcf9f4",
+                        "on-primary-fixed-variant": "#763300",
+                        "on-surface": "#1c1c19",
+                        "tertiary": "#695c4b",
+                        "primary-fixed": "#ffdbc9",
+                        "on-primary-container": "#773401",
+                        "inverse-on-surface": "#f3f0eb",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#c5b4a0",
+                        "secondary": "#47664b",
+                        "secondary-fixed-dim": "#adcfaf",
+                        "surface-variant": "#e5e2dd",
+                        "on-tertiary-container": "#524636",
+                        "on-background": "#1c1c19",
+                        "primary-fixed-dim": "#ffb68d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap": "16px",
+                        "unit": "8px",
+                        "touch-target": "48px",
+                        "container-padding": "24px",
+                        "section-gap": "40px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Quicksand"],
+                        "headline-lg-mobile": ["Lexend"],
+                        "body-md": ["Quicksand"],
+                        "display": ["Lexend"],
+                        "headline-md": ["Lexend"],
+                        "headline-lg": ["Lexend"],
+                        "label-sm": ["Quicksand"],
+                        "body-lg": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "700"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "500"}],
+                        "display": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #fcf9f4;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .squishy-btn:active {
+            transform: scale(0.96);
+        }
+        .glass-card {
+            background: rgba(246, 243, 238, 0.7);
+            backdrop-filter: blur(12px);
+        }
+        /* Custom 2D Vector Style Icons */
+        .vector-icon {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+    </style>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="antialiased text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top App Bar -->
+<header class="w-full top-0 sticky bg-surface dark:bg-surface-dim z-30 transition-all duration-300">
+<div class="flex items-center justify-between px-container-padding py-4 w-full max-w-[800px] mx-auto">
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-surface-container-low transition-colors scale-95 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">close</span>
+</button>
+<h1 class="font-display text-headline-md text-primary dark:text-primary-fixed-dim">Start something new</h1>
+<div class="w-10"></div>
+</div>
+</header>
+<main class="max-w-[800px] mx-auto px-container-padding pb-32">
+<!-- Input Section -->
+<section class="mt-section-gap space-y-stack-gap">
+<label class="block font-headline-md text-headline-md text-on-surface" for="habit-name">What's the habit?</label>
+<div class="relative">
+<input class="w-full h-16 px-6 bg-surface-container-low border-2 border-tertiary-container rounded-lg focus:ring-0 focus:border-primary transition-all duration-300 font-body-lg text-body-lg outline-none placeholder:text-on-surface-variant/40" id="habit-name" placeholder="e.g. Morning meditation" type="text"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2">
+<span class="material-symbols-outlined text-tertiary-container">edit_note</span>
+</div>
+</div>
+</section>
+<!-- Icon Selector Grid (Updated to 2D Vector Style) -->
+<section class="mt-section-gap space-y-stack-gap">
+<h2 class="font-headline-md text-headline-md text-on-surface">Choose an icon</h2>
+<div class="grid grid-cols-5 gap-4 bg-surface-container-low p-6 rounded-lg">
+<!-- Icon Buttons -->
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-transparent hover:border-primary-container transition-all squishy-btn bg-surface-container-lowest shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-secondary text-[32px]">potted_plant</span>
+</button>
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-transparent hover:border-primary-container transition-all squishy-btn bg-surface-container-lowest shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-[#3b82f6] text-[32px]">water_drop</span>
+</button>
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-primary transition-all squishy-btn bg-primary-container/20 shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-primary text-[32px]">self_improvement</span>
+</button>
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-transparent hover:border-primary-container transition-all squishy-btn bg-surface-container-lowest shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-tertiary text-[32px]">menu_book</span>
+</button>
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-transparent hover:border-primary-container transition-all squishy-btn bg-surface-container-lowest shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-error text-[32px]">nutrition</span>
+</button>
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-transparent hover:border-primary-container transition-all squishy-btn bg-surface-container-lowest shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-secondary text-[32px]">directions_run</span>
+</button>
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-transparent hover:border-primary-container transition-all squishy-btn bg-surface-container-lowest shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-[#a855f7] text-[32px]">palette</span>
+</button>
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-transparent hover:border-primary-container transition-all squishy-btn bg-surface-container-lowest shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-[#64748b] text-[32px]">bedtime</span>
+</button>
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-transparent hover:border-primary-container transition-all squishy-btn bg-surface-container-lowest shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-[#854d0e] text-[32px]">coffee</span>
+</button>
+<button class="emoji-chip flex items-center justify-center aspect-square glass-card rounded-full border-2 border-transparent hover:border-primary-container transition-all squishy-btn bg-surface-container-lowest shadow-sm" onclick="selectEmoji(this)">
+<span class="material-symbols-outlined vector-icon text-[#f59e0b] text-[32px]">light_mode</span>
+</button>
+</div>
+</section>
+<!-- Options Section -->
+<section class="mt-section-gap space-y-8">
+<div class="space-y-4">
+<h2 class="font-headline-md text-headline-md text-on-surface">Frequency</h2>
+<div class="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-6 py-3 rounded-full bg-primary-container text-on-primary-container font-label-md text-label-md border-2 border-primary-container transition-all squishy-btn">Daily</button>
+<button class="px-6 py-3 rounded-full bg-surface-container border-2 border-tertiary-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-all squishy-btn">Weekly</button>
+<button class="px-6 py-3 rounded-full bg-surface-container border-2 border-tertiary-container text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-high transition-all squishy-btn">Custom</button>
+</div>
+</div>
+<!-- Reminder Toggle -->
+<div class="flex items-center justify-between p-6 bg-surface-container-low rounded-lg shadow-[0_4px_20px_rgba(148,74,24,0.04)]">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-secondary-container flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-on-secondary-container vector-icon">notifications</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Remind me</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Stay on track with notifications</p>
+</div>
+</div>
+<button class="relative inline-flex h-8 w-14 items-center rounded-full bg-surface-container-highest transition-colors duration-300" id="reminder-toggle" onclick="toggleReminder()">
+<span class="inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform duration-300 translate-x-1" id="toggle-circle"></span>
+</button>
+</div>
+</section>
+<!-- Visual Aesthetic Card -->
+<section class="mt-section-gap">
+<div class="relative overflow-hidden rounded-lg aspect-[16/7] group">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A peaceful macro shot of a single green seedling emerging from dark, fertile soil. Soft morning sunlight filters through a mist in the background, creating a warm and hopeful atmosphere. The color palette features deep earthy browns and vibrant sage greens, aligning with a nurtured growth aesthetic. The image is clean and minimalist with shallow depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCI9ohDI-S9JP1E6wJseyKmHFKjjFkB_rTIuS2FRCcVs7dMLYxUV-VLhzermVdutXJRSwFw3eGsCKwH0RNscpIP_Kg0v2mrn5hGLWWuUgOjRu0BdI8uHx3U7SV24BUvmb8nTqQ9KBtPfmVWJb6_i_1PUhlDdK3tg_K5EsfV4sI7skw6tBOf9sRlAoenLp4RzZ7hJHQ1lg2mwbb4wjbA-Bq32yo_oLjgcqHbd4ChHdCeNCfq8RetXLnePjgKX-JoopgHYo_Hk5BlOTvM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent"></div>
+<div class="absolute bottom-4 left-6 right-6 text-white">
+<p class="font-headline-md text-headline-md leading-tight">Every garden starts with a single seed.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Button Area -->
+<footer class="fixed bottom-0 left-0 w-full p-container-padding bg-gradient-to-t from-surface via-surface/90 to-transparent z-40">
+<div class="max-w-[800px] mx-auto">
+<button class="w-full py-5 bg-primary text-white rounded-full font-display text-headline-md shadow-[0_8px_30px_rgba(148,74,24,0.25)] hover:bg-primary/90 hover:translate-y-[-2px] active:translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-3 squishy-btn">
+<span class="material-symbols-outlined vector-icon" style="font-variation-settings: 'FILL' 1;">eco</span>
+                Plant this habit
+            </button>
+</div>
+</footer>
+<script>
+        function toggleReminder() {
+            const toggle = document.getElementById('reminder-toggle');
+            const circle = document.getElementById('toggle-circle');
+            const isActive = toggle.classList.contains('bg-primary');
+
+            if (isActive) {
+                toggle.classList.remove('bg-primary');
+                toggle.classList.add('bg-surface-container-highest');
+                circle.classList.remove('translate-x-7');
+                circle.classList.add('translate-x-1');
+            } else {
+                toggle.classList.remove('bg-surface-container-highest');
+                toggle.classList.add('bg-primary');
+                circle.classList.remove('translate-x-1');
+                circle.classList.add('translate-x-7');
+            }
+        }
+
+        function selectEmoji(btn) {
+            document.querySelectorAll('.emoji-chip').forEach(el => {
+                el.classList.remove('border-primary', 'bg-primary-container/20');
+                el.classList.add('border-transparent', 'bg-surface-container-lowest');
+            });
+            
+            btn.classList.remove('border-transparent', 'bg-surface-container-lowest');
+            btn.classList.add('border-primary', 'bg-primary-container/20');
+            
+            btn.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                btn.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        const habitInput = document.getElementById('habit-name');
+        habitInput.addEventListener('focus', () => {
+            habitInput.parentElement.querySelector('span').style.color = '#944a18';
+        });
+        habitInput.addEventListener('blur', () => {
+            habitInput.parentElement.querySelector('span').style.color = '#c5b4a0';
+        });
+    </script>
+</body></html>
