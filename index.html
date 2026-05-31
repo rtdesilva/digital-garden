@@ -136,65 +136,43 @@ tailwind.config = {
 <!-- ===================== SCREEN: AUTH ===================== -->
 <div class="screen active" id="screen-auth">
   <main class="min-h-screen w-full flex flex-col items-center justify-center px-container-padding py-12" style="background: radial-gradient(circle at center, #ffffff 0%, #fcf9f4 100%);">
-    <div class="w-full max-w-[400px] text-center space-y-6">
+    <div class="w-full max-w-[380px] text-center space-y-8">
+
       <!-- Logo -->
-      <div class="flex flex-col items-center gap-2">
-        <div class="w-16 h-16 bg-primary-container/20 rounded-full flex items-center justify-center bloom-shadow">
-          <span class="material-symbols-outlined text-primary text-[40px]">filter_vintage</span>
+      <div class="flex flex-col items-center gap-3">
+        <div class="w-20 h-20 bg-primary-container/20 rounded-full flex items-center justify-center bloom-shadow">
+          <span class="material-symbols-outlined text-primary text-[48px]">filter_vintage</span>
         </div>
-        <h1 class="font-display text-headline-lg text-primary mt-2">Digital Garden</h1>
-        <p class="font-body-md text-on-surface-variant" id="auth-subtitle">Nurture your daily growth.</p>
+        <h1 class="font-display text-headline-lg text-primary">Digital Garden</h1>
+        <p class="font-body-md text-on-surface-variant">Plant habits. Watch them bloom.</p>
       </div>
 
-      <!-- Glass container -->
-      <div class="glass-card p-8 rounded-lg soft-shadow space-y-6">
-        <h2 class="font-headline-md text-headline-md text-on-surface text-left" id="auth-title">Welcome back</h2>
-        
-        <div class="space-y-4 text-left">
-          <!-- Email -->
-          <div class="space-y-2">
-            <label class="font-label-md text-label-md text-on-surface" for="auth-email">Email</label>
-            <div class="relative">
-              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-tertiary-container">mail</span>
-              <input id="auth-email" type="email" placeholder="you@example.com"
-                class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-2 border-tertiary-fixed rounded-full font-body-md text-body-md text-on-surface placeholder:text-tertiary-container focus:outline-none focus:border-primary transition-colors"/>
-            </div>
-          </div>
+      <!-- Sign-in card -->
+      <div class="glass-card p-8 rounded-2xl soft-shadow space-y-5">
+        <p class="font-body-md text-on-surface-variant text-sm">Sign in to sync your garden across all your devices.</p>
 
-          <!-- Password -->
-          <div class="space-y-2">
-            <label class="font-label-md text-label-md text-on-surface" for="auth-password">Password</label>
-            <div class="relative">
-              <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-tertiary-container">lock</span>
-              <input id="auth-password" type="password" placeholder="••••••••"
-                class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low border-2 border-tertiary-fixed rounded-full font-body-md text-body-md text-on-surface placeholder:text-tertiary-container focus:outline-none focus:border-primary transition-colors"/>
-            </div>
-          </div>
-        </div>
+        <!-- Error Message -->
+        <div id="auth-error" class="hidden text-error font-body-sm text-body-sm bg-error/10 p-3.5 rounded-lg text-left border border-error/20"></div>
 
-        <!-- Error Message (Terracotta) -->
-        <div id="auth-error" class="hidden text-error font-body-sm text-body-sm bg-error/10 p-3.5 rounded-lg text-left border border-error/20">
-        </div>
-
-        <!-- Actions -->
-        <div class="space-y-4">
-          <button onclick="handleAuthSubmit()" id="auth-submit-btn" class="w-full py-4 bg-primary text-white rounded-full font-display text-headline-md shadow-[0_8px_30px_rgba(148,74,24,0.20)] hover:bg-primary/90 hover:translate-y-[-2px] active:translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2 squishy-btn primary-btn-bounce">
-            <span>Sign In</span>
-            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
-          </button>
-
-          <p class="font-body-md text-on-surface-variant text-center">
-            <span id="auth-toggle-text">Don't have an account?</span>
-            <button onclick="toggleAuthMode()" class="text-primary font-bold hover:underline focus:outline-none ml-1" id="auth-toggle-btn">Sign Up</button>
-          </p>
-        </div>
+        <!-- Google Sign-In Button -->
+        <button onclick="signInWithGoogle()" id="google-signin-btn"
+          class="w-full py-4 bg-white border-2 border-gray-200 rounded-full font-semibold text-gray-700 shadow-sm hover:shadow-md hover:border-gray-300 hover:translate-y-[-2px] active:translate-y-[1px] transition-all duration-200 flex items-center justify-center gap-3 squishy-btn">
+          <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
       </div>
 
       <!-- Local Fallback Notice -->
       <div id="local-mode-banner" class="hidden glass-card px-4 py-3 text-center flex items-center justify-center gap-2 bg-primary/5 border border-primary/10">
         <span class="material-symbols-outlined text-[18px] text-primary">cloud_off</span>
-        <span class="font-label-sm text-label-sm text-primary">Local Sandbox Mode — Connect to Supabase to sync data</span>
+        <span class="font-label-sm text-label-sm text-primary">Supabase not connected</span>
       </div>
+
     </div>
   </main>
 </div>
@@ -987,40 +965,20 @@ function showAuthError(msg) {
   errorDiv.classList.remove('hidden');
 }
 
-async function handleAuthSubmit() {
-  const email = document.getElementById('auth-email').value.trim();
-  const password = document.getElementById('auth-password').value;
-  
-  if (!email || !password) {
-    showAuthError("Please fill out all fields.");
-    return;
-  }
-  
+async function signInWithGoogle() {
   if (!sbClient) {
-    // Sandbox simulation
-    state.user = { id: 'sandbox_user', email: email };
-    localStorage.setItem('bloom_sandbox_user', JSON.stringify(state.user));
-    await loadUserData();
-    checkOnboarding();
+    showAuthError("Supabase is not connected.");
     return;
   }
-  
   try {
-    let result;
-    if (authMode === 'login') {
-      result = await sbClient.auth.signInWithPassword({ email, password });
-    } else {
-      result = await sbClient.auth.signUp({ email, password });
-    }
-    
-    if (result.error) throw result.error;
-    
-    state.user = result.data.user;
-    await loadUserData();
-    checkOnboarding();
+    const { error } = await sbClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: 'https://rtdesilva.github.io/digital-garden/' }
+    });
+    if (error) throw error;
   } catch (error) {
-    console.error("Auth error:", error);
-    showAuthError(error.message || "An authentication error occurred.");
+    console.error("Google sign-in error:", error);
+    showAuthError(error.message || "Google sign-in failed.");
   }
 }
 
