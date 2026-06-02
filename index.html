@@ -127,6 +127,23 @@ tailwind.config = {
   .slide-up { animation: slideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
   /* Insights chart bar */
   .bar-fill { transition: height 0.6s cubic-bezier(0.22,1,0.36,1); }
+  
+  /* Toast Notification */
+  .toast-msg {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translate(-50%, -30px);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .toast-msg.show {
+    transform: translate(-50%, 0);
+    opacity: 1;
+    pointer-events: auto;
+  }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="manifest" href="manifest.json">
@@ -826,7 +843,12 @@ function renderHabits() {
       <button class="${btnClass}" onclick="toggleHabit('${h.id}'); event.stopPropagation();">${iconInner}</button>
       
       <!-- Management Overlay (Fades/Slides in on Long Press) -->
-      <div class="absolute inset-0 glass-card flex items-center justify-center gap-8 rounded-lg transition-all duration-300 ${showOverlay ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}" onclick="event.stopPropagation();">
+      <div class="absolute inset-0 glass-card flex items-center justify-center gap-8 rounded-lg transition-all duration-300 ${showOverlay ? 'opacity-100 pointer-events-auto scale-100' : 'opacity-0 pointer-events-none scale-95'}" 
+        onclick="event.stopPropagation();" 
+        onmousedown="event.stopPropagation();" 
+        onmouseup="event.stopPropagation();" 
+        ontouchstart="event.stopPropagation();" 
+        ontouchend="event.stopPropagation();">
         <button class="flex flex-col items-center gap-1 text-primary active:scale-90 transition-transform squishy-btn" onclick="editHabit('${h.id}'); event.stopPropagation();">
           <div class="w-12 h-12 bg-primary-container/20 rounded-full flex items-center justify-center">
             <span class="material-symbols-outlined text-[24px]">edit</span>
@@ -959,6 +981,38 @@ function toggleAuthMode() {
   }
 }
 
+function showToast(message, type = 'success') {
+  const existing = document.getElementById('toast-notification');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'toast-notification';
+  toast.className = 'toast-msg glass-card px-6 py-3.5 rounded-full soft-shadow flex items-center gap-2 border';
+  
+  let icon = 'info';
+  let iconColor = 'text-primary';
+  if (type === 'success') {
+    icon = 'check_circle';
+    iconColor = 'text-secondary';
+  } else if (type === 'error') {
+    icon = 'error';
+    iconColor = 'text-error';
+  }
+  
+  toast.innerHTML = `
+    <span class="material-symbols-outlined ${iconColor} text-[20px]" style="font-variation-settings:'FILL' 1;">${icon}</span>
+    <span class="font-label-md text-label-md text-on-surface font-semibold">${message}</span>
+  `;
+  document.body.appendChild(toast);
+  
+  setTimeout(() => toast.classList.add('show'), 50);
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400);
+  }, 2500);
+}
+
 function showAuthError(msg) {
   const errorDiv = document.getElementById('auth-error');
   errorDiv.textContent = msg;
@@ -1011,7 +1065,13 @@ async function loadUserData() {
       .eq('user_id', state.user.id);
     
     if (habitsError) throw habitsError;
-    state.habits = habitsData || [];
+    state.habits = (habitsData || []).map(h => ({
+      id: h.id.toString(),
+      name: h.name,
+      icon: h.icon,
+      iconColor: h.icon_color || 'text-primary',
+      freq: h.frequency || 'Daily'
+    }));
 
     // Completions
     const { data: compData, error: compError } = await sbClient
@@ -1178,13 +1238,21 @@ function nextOnboardingStep() {
 async function deleteHabit(id) {
   state.activeActionsHabitId = null;
   if (confirm("Are you sure you want to remove this habit?")) {
-    if (sbClient) {
-      await sbClient.from('habits').delete().eq('id', id);
+    try {
+      if (sbClient) {
+        const { error } = await sbClient.from('habits').delete().eq('id', id);
+        if (error) throw error;
+      }
+      state.habits = state.habits.filter(h => h.id !== id);
+      saveLocalData();
+      renderHabits();
+      updateStats();
+      showToast("Habit removed successfully! 🧹", "success");
+    } catch (error) {
+      console.error("Delete error:", error);
+      showToast("Failed to remove habit: " + (error.message || error), "error");
+      renderHabits();
     }
-    state.habits = state.habits.filter(h => h.id !== id);
-    saveLocalData();
-    renderHabits();
-    updateStats();
   } else {
     renderHabits();
   }
@@ -1224,52 +1292,63 @@ async function plantHabit() {
     return;
   }
   
-  if (state.editingHabitId) {
-    // Edit Mode
-    const habit = state.habits.find(h => h.id === state.editingHabitId);
-    if (habit) {
-      habit.name = name;
-      habit.icon = state.selectedIcon;
-      habit.iconColor = state.selectedIconColor;
-      habit.freq = state.selectedFreq;
+  const isEditing = !!state.editingHabitId;
+  
+  try {
+    if (isEditing) {
+      // Edit Mode
+      const habit = state.habits.find(h => h.id === state.editingHabitId);
+      if (habit) {
+        habit.name = name;
+        habit.icon = state.selectedIcon;
+        habit.iconColor = state.selectedIconColor;
+        habit.freq = state.selectedFreq;
+        
+        if (sbClient) {
+          const { error } = await sbClient.from('habits').update({
+            name: name,
+            icon: state.selectedIcon,
+            icon_color: state.selectedIconColor,
+            frequency: state.selectedFreq
+          }).eq('id', state.editingHabitId);
+          if (error) throw error;
+        }
+      }
+      state.editingHabitId = null;
+    } else {
+      // Plant Mode
+      const newId = Date.now().toString();
+      const newHabit = { id: newId, name, icon: state.selectedIcon, iconColor: state.selectedIconColor, freq: state.selectedFreq };
+      state.habits.push(newHabit);
       
       if (sbClient) {
-        await sbClient.from('habits').update({
-          name: name,
-          icon: state.selectedIcon,
-          icon_color: state.selectedIconColor,
-          frequency: state.selectedFreq
-        }).eq('id', state.editingHabitId);
+        const { error } = await sbClient.from('habits').insert([
+          { user_id: state.user.id, name, icon: state.selectedIcon, icon_color: state.selectedIconColor, frequency: state.selectedFreq }
+        ]);
+        if (error) throw error;
       }
     }
-    state.editingHabitId = null;
-  } else {
-    // Plant Mode
-    const newId = Date.now().toString();
-    const newHabit = { id: newId, name, icon: state.selectedIcon, iconColor: state.selectedIconColor, freq: state.selectedFreq };
-    state.habits.push(newHabit);
     
-    if (sbClient) {
-      await sbClient.from('habits').insert([
-        { user_id: state.user.id, name, icon: state.selectedIcon, icon_color: state.selectedIconColor, frequency: state.selectedFreq }
-      ]);
-    }
+    saveLocalData();
+    
+    // Reset form
+    document.getElementById('habit-name-input').value = '';
+    state.selectedIcon = 'self_improvement';
+    state.selectedIconColor = 'text-primary';
+    
+    // Reset title & button labels
+    document.getElementById('add-screen-title').textContent = 'Start something new';
+    document.getElementById('plant-btn-text').textContent = 'Plant this habit';
+    document.getElementById('plant-btn-icon').textContent = 'eco';
+    
+    await loadUserData();
+    showScreen('today');
+    
+    showToast(isEditing ? "Changes saved! ✏️" : "Habit planted successfully! 🌱", "success");
+  } catch (error) {
+    console.error("Plant/Edit habit error:", error);
+    showToast("Failed to save habit: " + (error.message || error), "error");
   }
-  
-  saveLocalData();
-  
-  // Reset form
-  document.getElementById('habit-name-input').value = '';
-  state.selectedIcon = 'self_improvement';
-  state.selectedIconColor = 'text-primary';
-  
-  // Reset title & button labels
-  document.getElementById('add-screen-title').textContent = 'Start something new';
-  document.getElementById('plant-btn-text').textContent = 'Plant this habit';
-  document.getElementById('plant-btn-icon').textContent = 'eco';
-  
-  await loadUserData();
-  showScreen('today');
 }
 
 // ============ CELEBRATION ============
