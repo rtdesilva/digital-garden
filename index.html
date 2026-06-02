@@ -1441,7 +1441,9 @@ async function init() {
   }
   
   if (sbClient) {
-    sbClient.auth.getSession().then(async ({ data: { session } }) => {
+    // 1. Check if there's an existing session on page load
+    try {
+      const { data: { session } } = await sbClient.auth.getSession();
       if (session) {
         state.user = session.user;
         await loadUserData();
@@ -1449,14 +1451,19 @@ async function init() {
       } else {
         showScreen('auth');
       }
-    });
+    } catch (err) {
+      console.error("Session retrieval error:", err);
+      showScreen('auth');
+    }
 
+    // 2. Listen to subsequent auth events (ignoring INITIAL_SESSION to prevent race conditions)
     sbClient.auth.onAuthStateChange(async (event, session) => {
-      if (session) {
+      console.log("[Auth Change]:", event, session ? "Session active" : "No session");
+      if (event === 'SIGNED_IN') {
         state.user = session.user;
         await loadUserData();
         checkOnboarding();
-      } else {
+      } else if (event === 'SIGNED_OUT') {
         state.user = null;
         showScreen('auth');
       }
